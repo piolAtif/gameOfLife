@@ -1,4 +1,4 @@
-var isNotUndefined = function(table, row, column){
+var isAliveCell = function(table, row, column){
 	if(table[row]){
 		if(table[row][column] == 'A')
 			return true;
@@ -15,7 +15,7 @@ var adjacentAliveCells = function(table, rowId, columnId){
 		var row = rowId+rowNumbers[i];
 		var column = columnId+colNumbers[i];
 
-		if(isNotUndefined(table,row,column))
+		if(isAliveCell(table,row,column))
 			adjacentsTable.push([row, column]);
 	}
 	return adjacentsTable;
