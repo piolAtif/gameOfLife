@@ -4,14 +4,16 @@ var Grid = require('../src/grid.js');
 describe('grid',function(){
 	
 	describe('next generation',function(){
+		var tableOf = function(grid){
+			return grid.nextGeneration().getTable();
+		};
 		
 		it('should return next generation for a 1*1 grid',function(){
 			var grid = new Grid(1,1);
 			grid.setCellAsAlive(0,0);
 
-			var generation = grid.nextGeneration();
+			var generation = tableOf(grid);
 			var expected = [['D']];
-
 
 			assert.deepEqual(['D'], generation[0]);
 			assert.deepEqual(expected, generation);
@@ -22,7 +24,7 @@ describe('grid',function(){
 			grid.setCellAsAlive(0,1);
 			grid.setCellAsAlive(1,1);
 
-			var generation = grid.nextGeneration();
+			var generation = tableOf(grid);
 
 			var expected = [['D','D'],['D','D']];
 
@@ -38,7 +40,7 @@ describe('grid',function(){
 			grid.setCellAsAlive(1,1);
 			grid.setCellAsAlive(2,1);
 
-			var generation = grid.nextGeneration();
+			var generation = tableOf(grid);
 
 			//Tests===================================
 
@@ -51,7 +53,7 @@ describe('grid',function(){
 			});
 
 			it('third generation of grid should be same as initial',function(){
-				var nextGen = grid.nextGeneration();
+				var nextGen = tableOf(grid);
 				var expected = [['D','A','D'],['D','A','D'],['D','A','D']];
 
 				assert.deepEqual(expected, nextGen);
@@ -69,7 +71,7 @@ describe('grid',function(){
 			grid.setCellAsAlive(3,2);
 
 			it('should return first generation of given grid',function(){
-				var generation = grid.nextGeneration();
+				var generation = tableOf(grid);
 				var expected = [['D','D','D','D'],
 								['A','D','A','D'],
 								['A','D','D','A'],
@@ -82,7 +84,7 @@ describe('grid',function(){
 			it('All cells should be dead in eight th generation',function(){
 				var generation;
 				for (var i = 0; i < 8; i++) {
-					generation = grid.nextGeneration();
+					generation = tableOf(grid);
 				}
 
 				var expected = [['D','D','D','D'],

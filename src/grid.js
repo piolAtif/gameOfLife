@@ -65,6 +65,10 @@ Grid.prototype = {
 		}
 	},
 
+	getTable:function(){
+		return this.table;
+	},
+
 
 	nextGeneration:function(){
 		var newTable = createTable(this.rows, this.columns);
@@ -75,7 +79,7 @@ Grid.prototype = {
 			}
 		}
 		this.table = newTable;
-		return this.table;
+		return this;
 	}
 
 	
