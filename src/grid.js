@@ -31,11 +31,7 @@ Grid.prototype = {
 				newTable[row][column] = this.table[row][column];	
 		}
 	},
-
-	getTable:function(){
-		return this.table;
-	},
-
+	
 	nextGeneration:function(){
 		var newTable = createTable(this.rows, this.columns);
 		for (var i = 0; i < this.rows; i++) {
