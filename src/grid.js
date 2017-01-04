@@ -55,13 +55,13 @@ Grid.prototype = {
 		}).length;
 	},
 
-	rule:function(row,column,aliveCells, list){
+	rule:function(row,column,aliveCells, newTable){
 		if(aliveCells==2 || aliveCells==3){
 			if(aliveCells == 3 && this.table[row][column] == 'D'){
-				list[row][column] ='A';
+				newTable[row][column] ='A';
 			}
 			else
-				list[row][column] = this.table[row][column];	
+				newTable[row][column] = this.table[row][column];	
 		}
 	},
 
