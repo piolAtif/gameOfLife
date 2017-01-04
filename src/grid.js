@@ -24,44 +24,44 @@ Grid.prototype = {
 		return value == undefined;
 	},
 
-	addTo: function(tableToAdd, r,c){
-		if(!this.isUndefined(this.table[r]))
-			tableToAdd.push(this.table[r][c]);
+	addTo: function(tableToAdd, row,column){
+		if(!this.isUndefined(this.table[row]))
+			tableToAdd.push(this.table[row][column]);
 	},
 
-	addNearestDiagonalCells:function(tableToAdd, r,c){
-		this.addTo(tableToAdd, r-1, c);
-		this.addTo(tableToAdd, r+1,c);
+	addNearestDiagonalCells:function(tableToAdd, row,column){
+		this.addTo(tableToAdd, row-1, column);
+		this.addTo(tableToAdd, row+1,column);
 	},
 
-	addAdjacentCells: function(r,c, tableToAdd){
-		var left = this.table[r][c-1];
-		var right= this.table[r][c+1];
+	addAdjacentCells: function(row,column, tableToAdd){
+		var left = this.table[row][column-1];
+		var right= this.table[row][column+1];
 
 		tableToAdd.push(left, right);
-		this.addTo(tableToAdd,r-1,c);
-		this.addTo(tableToAdd, r+1,c);
+		this.addTo(tableToAdd,row-1,column);
+		this.addTo(tableToAdd, row+1,column);
 
-		this.addNearestDiagonalCells(tableToAdd, r,c-1);
-		this.addNearestDiagonalCells(tableToAdd, r, c+1);
+		this.addNearestDiagonalCells(tableToAdd, row,column-1);
+		this.addNearestDiagonalCells(tableToAdd, row, column+1);
 	},
 
-	countAliveAdjacentCells: function(r,c){
+	countAliveAdjacentCells: function(row,column){
 		var adjacentCells = [];
-		this.addAdjacentCells(r,c, adjacentCells);
+		this.addAdjacentCells(row,column, adjacentCells);
 
 		return adjacentCells.filter(function(cell){
 			return cell == 'A';
 		}).length;
 	},
 
-	rule:function(r,c,aliveCells, list){
+	rule:function(row,column,aliveCells, list){
 		if(aliveCells==2 || aliveCells==3){
-			if(aliveCells == 3 && this.table[r][c] == 'D'){
-				list[r][c] ='A';
+			if(aliveCells == 3 && this.table[row][column] == 'D'){
+				list[row][column] ='A';
 			}
 			else
-				list[r][c] = this.table[r][c];	
+				list[row][column] = this.table[row][column];	
 		}
 	},
 
