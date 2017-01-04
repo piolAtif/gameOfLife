@@ -69,7 +69,6 @@ Grid.prototype = {
 		return this.table;
 	},
 
-
 	nextGeneration:function(){
 		var newTable = createTable(this.rows, this.columns);
 		for (var i = 0; i < this.rows; i++) {
@@ -81,8 +80,6 @@ Grid.prototype = {
 		this.table = newTable;
 		return this;
 	}
-
-	
 };
 
 module.exports = Grid;
