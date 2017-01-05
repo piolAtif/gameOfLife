@@ -116,39 +116,39 @@ describe('grid',function(){
 			
 		describe('when cell is alive',function(){
 
-			it('should return true if 1 neighbouring cell is alive',function(){
-				assert.ok(grid.needToChange('A',1));
+			it('should return false if 1 neighbouring cell is alive',function(){
+				assert.ok(!grid.willBeAlive('A',1));
 			});
 
-			it('should return false when 2 adjacent cells are alive',function(){
-				assert.ok(!grid.needToChange('A',2));
+			it('should return true if 2 adjacent cells are alive',function(){
+				assert.ok(grid.willBeAlive('A',2));
 			});
 
-			it('should return true when 4 adjacent cells are alive',function(){
-				assert.ok(grid.needToChange('A',4));
+			it('should return false if 4 adjacent cells are alive',function(){
+				assert.ok(!grid.willBeAlive('A',4));
 			});
 
-			it('should return false when 3 adjacent cells are alive',function(){
-				assert.ok(!grid.needToChange('A',3));
+			it('should return true if 3 adjacent cells are alive',function(){
+				assert.ok(grid.willBeAlive('A',3));
 			});
 		});
 
 		describe('when cell is dead',function(){
 			
 			it('should return false if 1 neighbouring cell is alive',function(){
-				assert.ok(!grid.needToChange('D',1));
+				assert.ok(!grid.willBeAlive('D',1));
 			});
 
 			it('should return false when 2 adjacent cells are alive',function(){
-				assert.ok(!grid.needToChange('D',2));
+				assert.ok(!grid.willBeAlive('D',2));
 			});
 
 			it('should return true when 3 adjacent cells are alive',function(){
-				assert.ok(grid.needToChange('D',3));
+				assert.ok(grid.willBeAlive('D',3));
 			});
 
 			it('should return false if 4 adjacent cells are alive',function(){
-				assert.ok(!grid.needToChange('D',4));
+				assert.ok(!grid.willBeAlive('D',4));
 			});
 		});
 	});

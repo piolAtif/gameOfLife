@@ -11,8 +11,6 @@ var createTable = function(rows, columns){
 	return table;
 }
 
-var viceVersaOf = {'A':'D','D':'A'};
-
 var Grid = function(rows, columns){
 	this.rows = rows;
 	this.columns = columns;
@@ -24,18 +22,16 @@ Grid.prototype = {
 		this.table[rowId][columnId] = 'A';
 	},
 
-	needToChange:function(cell, aliveAdjacents){
-		if(cell == 'A')
-			return (aliveAdjacents < 2 || aliveAdjacents > 3);
-		return aliveAdjacents == 3;
+	willBeAlive:function(cell, aliveAdjacents){
+		return (aliveAdjacents==3 ||(aliveAdjacents==2 && cell=='A'))
 	},
 
 	nextStateOf:function(rowId, columnId){
 		var cell = this.table[rowId][columnId];
 		var count = adjacentAliveCells(this.table, rowId, columnId).length;
-		if(this.needToChange(cell, count))
-			return viceVersaOf[cell];
-		return cell;
+		if(this.willBeAlive(cell, count))
+			return 'A';
+		return 'D'
 	},
 	
 	nextGeneration:function(){
