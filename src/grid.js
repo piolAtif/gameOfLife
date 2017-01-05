@@ -1,4 +1,4 @@
-var adjacentAliveCells = require('./adjacentAliveCells');
+// var adjacentAliveCells = require('./adjacentAliveCells');
 
 var createTable = function(rows, columns){
 	var table = [];
@@ -46,4 +46,4 @@ Grid.prototype = {
 	}
 };
 
-module.exports = Grid;
+// module.exports = Grid;

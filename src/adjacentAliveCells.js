@@ -21,4 +21,4 @@ var adjacentAliveCells = function(table, rowId, columnId){
 	return adjacentsTable;
 };
 
-module.exports = adjacentAliveCells;
+// module.exports = adjacentAliveCells;

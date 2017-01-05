@@ -1,0 +1,9 @@
+#childDiv{
+
+	display: flex;
+}
+
+#childDiv div{
+	border: 1px solid black;
+}
+
