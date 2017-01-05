@@ -22,14 +22,18 @@ Grid.prototype = {
 		this.table[rowId][columnId] = 'A';
 	},
 
-	rule:function(row,column,aliveCells, newTable){
-		if(aliveCells==2 || aliveCells==3){
-			if(aliveCells == 3 && this.table[row][column] == 'D'){
-				newTable[row][column] ='A';
-			}
-			else
-				newTable[row][column] = this.table[row][column];	
-		}
+	needToChange:function(cell, aliveAdjacents){
+		if(cell == 'A')
+			return (aliveAdjacents < 2 || aliveAdjacents > 3);
+		return aliveAdjacents == 3;
+
+		// if(aliveCells==2 || aliveCells==3){
+		// 	if(aliveCells == 3 && this.table[row][column] == 'D'){
+		// 		newTable[row][column] ='A';
+		// 	}
+		// 	else
+		// 		newTable[row][column] = this.table[row][column];	
+		// }
 	},
 	
 	nextGeneration:function(){
@@ -37,7 +41,7 @@ Grid.prototype = {
 		for (var i = 0; i < this.rows; i++) {
 			for (var j = 0; j < this.columns; j++) {
 				var count = adjacentAliveCells(this.table, i,j).length;
-				this.rule(i,j,count, newTable);
+				this.needToChange(i,j,count, newTable);
 			}
 		}
 		this.table = newTable;

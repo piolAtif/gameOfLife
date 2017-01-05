@@ -111,13 +111,45 @@ describe('grid',function(){
 		});
 	});
 
-	describe('rule',function(){
-		it('should set all A to D for a 1*1 grid',function(){
-			var grid = new Grid(1,1);
-			grid.setCellAsAlive(0,0);
+	describe.only("Need to change",function(){
+		var grid = new Grid(1,1);
+			
+		describe('when cell is alive',function(){
 
-			var newTable = [['D']];
-			grid.rule(0,0,newTable);
+			it('should return true if 1 neighbouring cell is alive',function(){
+				assert.ok(grid.needToChange('A',1));
+			});
+
+			it('should return false when 2 adjacent cells are alive',function(){
+				assert.ok(!grid.needToChange('A',2));
+			});
+
+			it('should return true when 4 adjacent cells are alive',function(){
+				assert.ok(grid.needToChange('A',4));
+			});
+
+			it('should return false when 3 adjacent cells are alive',function(){
+				assert.ok(!grid.needToChange('A',3));
+			});
+		});
+
+		describe('when cell is dead',function(){
+			
+			it('should return false if 1 neighbouring cell is alive',function(){
+				assert.ok(!grid.needToChange('D',1));
+			});
+
+			it('should return false when 2 adjacent cells are alive',function(){
+				assert.ok(!grid.needToChange('D',2));
+			});
+
+			it('should return true when 3 adjacent cells are alive',function(){
+				assert.ok(grid.needToChange('D',3));
+			});
+
+			it('should return false if 4 adjacent cells are alive',function(){
+				assert.ok(!grid.needToChange('D',4));
+			});
 		});
 	});
 });
