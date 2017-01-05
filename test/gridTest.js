@@ -152,4 +152,43 @@ describe('grid',function(){
 			});
 		});
 	});
+
+	describe('next state of',function(){
+		describe('dead cells 3*3 grid',function(){
+			it("should return same prev state for dead cells",function(){
+				var grid = new Grid(3,3);
+
+				assert.equal('D',grid.nextStateOf(0,1));
+				assert.equal('D',grid.nextStateOf(1,1));
+			});
+		});
+		
+		describe('non dead cells 3*3 grid',function(){
+			var grid = new Grid(3,3);
+
+			for (var i = 0; i < 3; i++) {
+				for (var j = 0; j < 3; j++) {
+					grid.setCellAsAlive(i,j);
+				}
+			}
+
+			it("should return four edge cells alive",function(){
+				assert.equal('A',grid.nextStateOf(0,0));
+				assert.equal('A',grid.nextStateOf(0,2));
+				assert.equal('A',grid.nextStateOf(2,0));
+				assert.equal('A',grid.nextStateOf(2,2));
+
+			});
+
+			it("should return other cells as dead",function(){
+				assert.equal('D',grid.nextStateOf(1,0));
+				assert.equal('D',grid.nextStateOf(1,1));
+				assert.equal('D',grid.nextStateOf(1,2));
+				assert.equal('D',grid.nextStateOf(2,1));
+				assert.equal('D',grid.nextStateOf(0,1));
+
+			});
+		});
+
+	});
 });
