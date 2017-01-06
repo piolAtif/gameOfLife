@@ -1,6 +1,6 @@
 #childDiv{
 
-	display: flex;
+	display: -webkit-box;
 }
 
 #childDiv div{
