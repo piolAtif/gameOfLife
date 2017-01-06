@@ -89,6 +89,9 @@ var stop = function(){
 }
 
 var defaultGrid = function(){
+	var values = getRowAndColumn();
+	values[0].value = 5;
+	values[1].value = 5;
 	grid = new Grid(5,5);
 	grid.setCellAsAlive(1,2);
 	grid.setCellAsAlive(2,2);
