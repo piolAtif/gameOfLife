@@ -1,5 +1,6 @@
 var grid;
 var interval;
+var score = 0;
 
 var color = {'A':'#000000','D':'#ffffff'};
 
@@ -60,14 +61,17 @@ var createGrid = function(){
 };
 
 var  clearPreviousGrid = function(){
-	alert('game over');
+	alert('your score is:'+score);
+	score = 0;
 	clearInterval(interval);
+
 }
 
 
 var next = function(){
 	if(!grid.isAnyCellAlive())
 		return clearPreviousGrid();
+	score++;
 	grid = grid.nextGeneration();
 	drawGrid(grid);	
 }
