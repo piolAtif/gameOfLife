@@ -206,4 +206,85 @@ describe('grid',function(){
 		});
 
 	});
+
+	describe('reverse',function(){
+
+		it('should return A as reverse for D cell for 1*1 grid',function(){
+			var grid = new Grid(1,1);
+			grid.reverse(0,0);
+
+			var expectedGrid = new Grid(1,1);
+			expectedGrid.setCellAsAlive(0,0); 
+
+			assert.deepEqual(expectedGrid, grid);
+		});
+
+		it('should return reverse if some cells reverse double time',function(){
+			var grid = new Grid(2,2);
+			grid.reverse(0,0);
+			grid.reverse(1,1);
+			grid.reverse(1,1);
+
+			var expectedGrid = new Grid(2,2);
+			expectedGrid.setCellAsAlive(0,0);
+
+			assert.deepEqual(expectedGrid, grid);
+		})
+
+		it('should return reverse of each cell in 2*2 grid',function(){
+			var grid =  new Grid(2,2);
+			grid.reverse(0,0);
+			grid.reverse(1,0);
+
+			var expectedGrid = new Grid(2,2);
+			expectedGrid.setCellAsAlive(0,0);
+			expectedGrid.setCellAsAlive(1,0);
+
+			assert.deepEqual(expectedGrid, grid);
+		});
+	});
+
+	describe('adjacentAliveCells',function(){
+
+		it("should return empty list for a 1*1 table",function(){
+			var grid = new Grid(1,1);
+
+			var neighbouringCells = grid.adjacentAliveCells(0,0);
+
+			assert.equal(0,neighbouringCells.length);
+		});
+
+		it("should return neighbouring cells list for a 1*2 table",function(){
+			var grid = new Grid(1,2);
+			grid.reverse(0,0);
+			
+			var _00thCellAdjacents = grid.adjacentAliveCells(0,0);
+			var _01thCellAdjacents = grid.adjacentAliveCells(0,1);
+
+			assert.equal(0, _00thCellAdjacents.length);
+			assert.equal(1, _01thCellAdjacents.length);
+			assert.deepEqual([[0,0]], _01thCellAdjacents);
+		});
+
+		it("should return neighbouring cells for a 3*3 table",function(){
+			var grid = new Grid(3,3);
+			grid.reverse(0,0);
+			grid.reverse(0,2);
+			grid.reverse(1,1);
+
+			var _00thCellAdjacents = grid.adjacentAliveCells(0,0);
+			var _11thCellAdjacents = grid.adjacentAliveCells(1,1);
+			var _01thCellAdjacents = grid.adjacentAliveCells(0,1);
+
+			assert.equal(1, _00thCellAdjacents.length);
+			assert.deepEqual([[1,1]], _00thCellAdjacents);
+
+			assert.equal(2,_11thCellAdjacents.length);
+			assert.deepEqual([[0,0],[0,2]], _11thCellAdjacents);
+
+			assert.equal(3, _01thCellAdjacents.length);
+			assert.deepEqual([[0,0],[0,2],[1,1]], _01thCellAdjacents);
+		});
+});
+
 });
