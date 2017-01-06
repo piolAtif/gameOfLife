@@ -87,3 +87,15 @@ var stop = function(){
 	document.getElementById('start').disabled = false;
 
 }
+
+var defaultGrid = function(){
+	grid = new Grid(5,5);
+	grid.setCellAsAlive(1,2);
+	grid.setCellAsAlive(2,2);
+	grid.setCellAsAlive(3,2);
+
+	setWidthAndHeight(5,5);
+	drawGrid(grid);
+};
+
+window.onload = defaultGrid;
