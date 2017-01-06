@@ -30,15 +30,6 @@ var removeGridTable = function(){
 	d3.selectAll('#childDiv').remove();
 }
 
-var removeGridAndValue = function(){
-	removeGridTable();	
-	var values = getRowAndColumn();
-
-	values.forEach(function(element){
-		element.value = '';
-	});
-};
-
 var drawGrid = function(gridToDraw){
 	var mainDiv = d3.select('#grid');
 	removeGridTable();
@@ -71,9 +62,6 @@ var createGrid = function(){
 var  clearPreviousGrid = function(){
 	alert('game over');
 	clearInterval(interval);
-	removeGridAndValue();
-	grid = '';
-	return grid;
 }
 
 
@@ -85,7 +73,6 @@ var next = function(){
 }
 
 var start = function(){
-	document.getElementById('start').disabled = true;
 	document.getElementById('pause').disabled = false;
 	interval = window.setInterval(next, 300);
 }
