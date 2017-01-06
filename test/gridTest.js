@@ -285,6 +285,5 @@ describe('grid',function(){
 			assert.equal(3, _01thCellAdjacents.length);
 			assert.deepEqual([[0,0],[0,2],[1,1]], _01thCellAdjacents);
 		});
-});
-
+	});
 });

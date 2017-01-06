@@ -1,7 +1,7 @@
 var grid;
 var interval;
 
-var color = {'A':'#000000','D':'#fffff'};
+var color = {'A':'#000000','D':'#ffffff'};
 
 var getRowAndColumn = function(){
 	var row = document.getElementsByName('row')[0];
@@ -9,17 +9,19 @@ var getRowAndColumn = function(){
 	return [row,column];
 }
 
-var drawADiv = function(divToAdd, row, column,gridToChange){
-	var cell = gridToChange.table[row][column];
+var getValue = function(grid, row, column){
+	return grid.table[row][column];
+}
 
+var drawADiv = function(divToAdd, row, column,gridToChange){
+	var cell = getValue(gridToChange, row, column);
 	divToAdd.append("div")
 	.style('background-color',color[cell])
 	.attr('id', 'd'+row+''+column)
 	.on('click',function(){
 		var currDiv = d3.select('#d'+row+''+column);
-
 		gridToChange.reverse(row, column);
-		cell = gridToChange.table[row][column];
+		cell = getValue(gridToChange, row, column);
 		currDiv.style('background-color',color[cell]);
 	});
 };
