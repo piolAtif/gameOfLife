@@ -33,7 +33,7 @@ var inRange = function(value){
 	return 500;
 }
 
-var setWidthAndHeight = function(row, column){
+var setParentWidthAndHeight = function(row, column){
 	var parentHeight = inRange((50*row)+row);
 	var parentWidth = inRange((50*column)+column);
 
@@ -71,7 +71,7 @@ var drawGrid = function(gridToDraw){
 	var mainDiv = d3.select('#grid');
 	removeGridTable();
 
-	var parentSize = setWidthAndHeight(gridToDraw.rows,gridToDraw.columns);
+	var parentSize = setParentWidthAndHeight(gridToDraw.rows,gridToDraw.columns);
 	var childSize = setChildHeightAndWidth(parentSize,gridToDraw);
 
 	for (var i = 0; i < gridToDraw.rows; i++) {
@@ -87,8 +87,8 @@ var drawGrid = function(gridToDraw){
 //after click on Ok button
 var createGrid = function(){
 	var values = getRowAndColumn();
-	var row = values[0].value;
-	var column = values[1].value;
+	var row = +values[0].value;
+	var column = +values[1].value;
 
 	grid = new Grid(row, column);
 	drawGrid(grid);
@@ -135,7 +135,7 @@ var defaultGrid = function(){
 	grid.setCellAsAlive(2,2);
 	grid.setCellAsAlive(3,2);
 
-	setWidthAndHeight(5,5);
+	setParentWidthAndHeight(5,5);
 	drawGrid(grid);
 };
 
