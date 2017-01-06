@@ -1,4 +1,5 @@
 var grid;
+var interval;
 
 var drawADiv = function(divToAdd, rangeFrom, rangeTo,gridToChange){
 	
@@ -14,11 +15,16 @@ var drawADiv = function(divToAdd, rangeFrom, rangeTo,gridToChange){
 	});
 };
 
+var removeGridTable = function(){
+	d3.selectAll('#childDiv').remove();
+}
+
 var drawGrid = function(gridToDraw){
 	var table = gridToDraw.table;
 
 	var mainDiv = d3.select('#grid');
-	d3.selectAll('#childDiv').remove();
+	removeGridTable();
+	
 
 	for (var i = 0; i < gridToDraw.rows; i++) {
 		var parentDiv = mainDiv.append('div').attr('id','childDiv');
@@ -44,10 +50,19 @@ var createGrid = function(){
 
 
 var next = function(){
-	grid = grid.nextGeneration();
-	drawGrid(grid);
+	if(grid.isAnyCellAlive()){
+		grid = grid.nextGeneration();
+		drawGrid(grid);	
+	}
+	else{
+		alert('game over');
+		clearInterval(interval);
+		grid = '';
+		removeGridTable();
+	}
+	
 }
 
 var start = function(){
-	window.setInterval(next, 1000);
+	interval = setInterval(next, 1000);
 }

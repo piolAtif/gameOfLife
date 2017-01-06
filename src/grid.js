@@ -33,6 +33,17 @@ Grid.prototype = {
 			return 'A';
 		return 'D'
 	},
+
+	isAnyCellAlive:function(){
+		var count = 0;
+		for (var i = 0; i < this.rows; i++) {
+			for (var j = 0; j < this.columns; j++) {
+				if(this.table[i][j] == 'A')
+					return true;
+			}
+		}
+		return false;
+	},
 	
 	nextGeneration:function(){
 		var newTable = createTable(this.rows, this.columns);
