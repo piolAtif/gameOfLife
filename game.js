@@ -1,17 +1,20 @@
 var grid;
 var interval;
 
-var drawADiv = function(divToAdd, rangeFrom, rangeTo,gridToChange){
-	
+var color = {'A':'#000000','D':'#fffff'};
+
+var drawADiv = function(divToAdd, row, column,gridToChange){
+	var cell = gridToChange.table[row][column];
+
 	divToAdd.append("div")
 	.style("width",50+'px')
 	.style("height",50+'px')
-	.text(gridToChange.table[rangeFrom][rangeTo])
-	.attr('id', 'd'+rangeFrom+''+rangeTo)
+	.style('background-color',color[cell])
+	.attr('id', 'd'+row+''+column)
 	.on('click',function(){
-		var currDiv = d3.select('#d'+rangeFrom+''+rangeTo);
-		gridToChange.setCellAsAlive(rangeFrom, rangeTo);
-		currDiv.text('A');
+		var currDiv = d3.select('#d'+row+''+column);
+		gridToChange.setCellAsAlive(row, column);
+		currDiv.style('background-color','black');
 	});
 };
 
@@ -20,16 +23,13 @@ var removeGridTable = function(){
 }
 
 var drawGrid = function(gridToDraw){
-	var table = gridToDraw.table;
-
 	var mainDiv = d3.select('#grid');
 	removeGridTable();
-	
 
 	for (var i = 0; i < gridToDraw.rows; i++) {
 		var parentDiv = mainDiv.append('div').attr('id','childDiv');
 		for (var j = 0; j < gridToDraw.columns; j++) {
-			drawADiv(parentDiv,j,i, gridToDraw);
+			drawADiv(parentDiv,i,j, gridToDraw);
 		};
 	};
 }
