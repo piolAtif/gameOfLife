@@ -78,6 +78,7 @@ var next = function(){
 
 var start = function(){
 	document.getElementById('pause').disabled = false;
+	document.getElementById('start').disabled = true;
 	interval = window.setInterval(next, 300);
 }
 
