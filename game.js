@@ -2,7 +2,9 @@ var grid;
 var interval;
 var score = 0;
 
-var color = {'A':'#000000','D':'#ffffff'};
+var color = {'A':d3.scaleOrdinal(d3.schemeCategory10),
+			'D':function(i){return '#ffffff';}
+		};
 
 var getRowAndColumn = function(){
 	var row = document.getElementsByName('row')[0];
@@ -14,40 +16,70 @@ var getValue = function(grid, row, column){
 	return grid.table[row][column];
 }
 
-var drawADiv = function(divToAdd, row, column,gridToChange){
+
+var removeGridTable = function(){
+	d3.selectAll('#childDiv').remove();
+};
+
+var setChildHeightAndWidth = function(parentSize, gridToDraw){
+	var childHeight = parentSize[0]/gridToDraw.rows
+	var childWidth = parentSize[1]/gridToDraw.columns;
+	return [childHeight, childWidth];
+};
+
+var inRange = function(value){
+	if(value<=500)
+		return value;
+	return 500;
+}
+
+var setWidthAndHeight = function(row, column){
+	var parentHeight = inRange((50*row)+row);
+	var parentWidth = inRange((50*column)+column);
+
+	d3.select('#grid')
+		.attr("width",parentWidth+'px')
+		.attr("height",parentHeight+'px');
+
+	return [parentHeight, parentWidth];
+}
+
+//================================Draw part=====================
+
+var drawADiv = function(divToAdd, row, column,gridToChange, size){
+
 	var cell = getValue(gridToChange, row, column);
 	divToAdd.append("div")
-	.style('background-color',color[cell])
+	.style('background-color',color[cell](row+column))
+	.style('height',size[0]+'px')
+	.style('width', size[1]+'px')
 	.attr('id', 'd'+row+''+column)
 	.on('click',function(){
 		var currDiv = d3.select('#d'+row+''+column);
 		gridToChange.reverse(row, column);
 		cell = getValue(gridToChange, row, column);
-		currDiv.style('background-color',color[cell]);
+		currDiv.style('background-color',color[cell](row));
 	});
 };
 
-var removeGridTable = function(){
-	d3.selectAll('#childDiv').remove();
-}
+//draw a grid
 
 var drawGrid = function(gridToDraw){
 	var mainDiv = d3.select('#grid');
 	removeGridTable();
 
+	var parentSize = setWidthAndHeight(gridToDraw.rows,gridToDraw.columns);
+	var childSize = setChildHeightAndWidth(parentSize,gridToDraw);
+
 	for (var i = 0; i < gridToDraw.rows; i++) {
 		var parentDiv = mainDiv.append('div').attr('id','childDiv');
 		for (var j = 0; j < gridToDraw.columns; j++) {
-			drawADiv(parentDiv,i,j, gridToDraw);
+			drawADiv(parentDiv,i,j, gridToDraw, childSize);
 		};
 	};
 };
 
-var setWidthAndHeight = function(row, column){
-	d3.select('#grid')
-		.style("width",function(){return (50*column)+column})
-		.style("height",function(){return(50*row)}+row);
-}
+//=========================Button==========================
 
 //after click on Ok button
 var createGrid = function(){
@@ -56,7 +88,6 @@ var createGrid = function(){
 	var column = values[1].value;
 
 	grid = new Grid(row, column);
-	setWidthAndHeight(row,column);
 	drawGrid(grid);
 };
 
@@ -64,7 +95,6 @@ var  clearPreviousGrid = function(){
 	alert('your score is:'+score);
 	score = 0;
 	clearInterval(interval);
-
 }
 
 
@@ -91,6 +121,8 @@ var stop = function(){
 var clearGrid = function(){
 	createGrid();
 };
+
+//Create default grid
 
 var defaultGrid = function(){
 	var values = getRowAndColumn();
