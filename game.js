@@ -44,6 +44,11 @@ var setWidthAndHeight = function(row, column){
 	return [parentHeight, parentWidth];
 }
 
+var makeClickableStartOrPause = function(startValue, pauseValue){
+	document.getElementById('pause').disabled = pauseValue;
+	document.getElementById('start').disabled = startValue;
+}
+
 //================================Draw part=====================
 
 var drawADiv = function(divToAdd, row, column,gridToChange, size){
@@ -53,12 +58,10 @@ var drawADiv = function(divToAdd, row, column,gridToChange, size){
 	.style('background-color',color[cell](row+column))
 	.style('height',size[0]+'px')
 	.style('width', size[1]+'px')
-	.attr('id', 'd'+row+''+column)
 	.on('click',function(){
-		var currDiv = d3.select('#d'+row+''+column);
 		gridToChange.reverse(row, column);
 		cell = getValue(gridToChange, row, column);
-		currDiv.style('background-color',color[cell](row));
+		this.style['background-color'] = color[cell](row+column);
 	});
 };
 
@@ -95,6 +98,7 @@ var  clearPreviousGrid = function(){
 	alert('your score is:'+score);
 	score = 0;
 	clearInterval(interval);
+	makeClickableStartOrPause(false, true);
 }
 
 
@@ -107,15 +111,13 @@ var next = function(){
 }
 
 var start = function(){
-	document.getElementById('pause').disabled = false;
-	document.getElementById('start').disabled = true;
+	makeClickableStartOrPause(true, false);
 	interval = window.setInterval(next, 300);
 }
 
 var stop = function(){
 	clearInterval(interval);
-	document.getElementById('pause').disabled = true;
-	document.getElementById('start').disabled = false;
+	makeClickableStartOrPause(false, true);
 }
 
 var clearGrid = function(){
