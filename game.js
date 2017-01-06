@@ -17,8 +17,10 @@ var drawADiv = function(divToAdd, row, column,gridToChange){
 	.attr('id', 'd'+row+''+column)
 	.on('click',function(){
 		var currDiv = d3.select('#d'+row+''+column);
-		gridToChange.setCellAsAlive(row, column);
-		currDiv.style('background-color','black');
+
+		gridToChange.reverse(row, column);
+		cell = gridToChange.table[row][column];
+		currDiv.style('background-color',color[cell]);
 	});
 };
 
@@ -53,6 +55,7 @@ var setWidthAndHeight = function(row, column){
 		.style("height",function(){return(50*row)}+row);
 }
 
+//after click on Ok button
 var createGrid = function(){
 	var values = getRowAndColumn();
 	var row = values[0].value;
@@ -81,11 +84,13 @@ var next = function(){
 
 var start = function(){
 	document.getElementById('start').disabled = true;
+	document.getElementById('pause').disabled = false;
 	interval = window.setInterval(next, 300);
 }
 
 var stop = function(){
 	clearInterval(interval);
+	document.getElementById('pause').disabled = true;
 	document.getElementById('start').disabled = false;
 
 }
