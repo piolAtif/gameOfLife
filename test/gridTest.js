@@ -9,7 +9,7 @@ describe('grid',function(){
 			var grid = new Grid(1,1);
 			grid.setCellAsAlive(0,0);
 
-			var tableOfGrid = grid.nextGeneration();
+			grid = grid.nextGeneration();
 			var expectedGrid = new Grid(1,1);
 
 			assert.deepEqual(expectedGrid, grid);
@@ -20,10 +20,25 @@ describe('grid',function(){
 			grid.setCellAsAlive(0,1);
 			grid.setCellAsAlive(1,1);
 
-			var tableOfGrid = grid.nextGeneration();
+			grid = grid.nextGeneration();
 			var expectedGrid = new Grid(2,2);
 
 			assert.deepEqual(expectedGrid, grid);
+		});
+
+		it('should return nextGeneration for a 2*3 grid',function(){
+			var grid = new Grid(2,3);
+			grid.setCellAsAlive(0,0);
+			grid.setCellAsAlive(0,2);
+			grid.setCellAsAlive(1,1);
+
+			grid = grid.nextGeneration();
+			var expectedGrid = new Grid(2,3);
+			expectedGrid.setCellAsAlive(0,1);
+			expectedGrid.setCellAsAlive(1,1);
+
+			assert.deepEqual(expectedGrid, grid);
+
 		});
 
 		describe('generate a 3*3 grid',function(){
