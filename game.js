@@ -47,19 +47,20 @@ var drawGrid = function(gridToDraw){
 	};
 };
 
+var setWidthAndHeight = function(row, column){
+	d3.select('#grid')
+		.style("width",function(){return (50*column)+column})
+		.style("height",function(){return(50*row)}+row);
+}
+
 var createGrid = function(){
 	var values = getRowAndColumn();
 	var row = values[0].value;
 	var column = values[1].value;
 
 	grid = new Grid(row, column);
-
-	d3.select('#grid')
-		.style("width",function(){return (50*column)+column})
-		.style("height",function(){return(50*row)}+row);
-
+	setWidthAndHeight(row,column);
 	drawGrid(grid);
-
 };
 
 var  clearPreviousGrid = function(){
@@ -79,5 +80,12 @@ var next = function(){
 }
 
 var start = function(){
-	interval = setInterval(next, 1000);
+	document.getElementById('start').disabled = true;
+	interval = window.setInterval(next, 300);
+}
+
+var stop = function(){
+	clearInterval(interval);
+	document.getElementById('start').disabled = false;
+
 }
