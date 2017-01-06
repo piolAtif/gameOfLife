@@ -3,6 +3,12 @@ var interval;
 
 var color = {'A':'#000000','D':'#fffff'};
 
+var getRowAndColumn = function(){
+	var row = document.getElementsByName('row')[0];
+	var column = document.getElementsByName('column')[0];
+	return [row,column];
+}
+
 var drawADiv = function(divToAdd, row, column,gridToChange){
 	var cell = gridToChange.table[row][column];
 
@@ -20,6 +26,15 @@ var removeGridTable = function(){
 	d3.selectAll('#childDiv').remove();
 }
 
+var removeGridAndValue = function(){
+	removeGridTable();	
+	var values = getRowAndColumn();
+
+	values.forEach(function(element){
+		element.value = '';
+	});
+};
+
 var drawGrid = function(gridToDraw){
 	var mainDiv = d3.select('#grid');
 	removeGridTable();
@@ -30,12 +45,13 @@ var drawGrid = function(gridToDraw){
 			drawADiv(parentDiv,i,j, gridToDraw);
 		};
 	};
-}
-
+};
 
 var createGrid = function(){
-	var row = document.getElementsByName('row')[0].value;
-	var column = document.getElementsByName('column')[0].value;
+	var values = getRowAndColumn();
+	var row = values[0].value;
+	var column = values[1].value;
+
 	grid = new Grid(row, column);
 
 	d3.select('#grid')
@@ -46,19 +62,20 @@ var createGrid = function(){
 
 };
 
+var  clearPreviousGrid = function(){
+	alert('game over');
+	clearInterval(interval);
+	removeGridAndValue();
+	grid = '';
+	return grid;
+}
+
 
 var next = function(){
-	if(grid.isAnyCellAlive()){
-		grid = grid.nextGeneration();
-		drawGrid(grid);	
-	}
-	else{
-		alert('game over');
-		clearInterval(interval);
-		grid = '';
-		removeGridTable();
-	}
-	
+	if(!grid.isAnyCellAlive())
+		return clearPreviousGrid();
+	grid = grid.nextGeneration();
+	drawGrid(grid);	
 }
 
 var start = function(){
