@@ -7,8 +7,6 @@ var drawADiv = function(divToAdd, row, column,gridToChange){
 	var cell = gridToChange.table[row][column];
 
 	divToAdd.append("div")
-	.style("width",50+'px')
-	.style("height",50+'px')
 	.style('background-color',color[cell])
 	.attr('id', 'd'+row+''+column)
 	.on('click',function(){
