@@ -85,8 +85,11 @@ var stop = function(){
 	clearInterval(interval);
 	document.getElementById('pause').disabled = true;
 	document.getElementById('start').disabled = false;
-
 }
+
+var clearGrid = function(){
+	createGrid();
+};
 
 var defaultGrid = function(){
 	var values = getRowAndColumn();
