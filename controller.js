@@ -14,7 +14,12 @@ var saveGrid = function(req, res){
 	})
 
 	req.on('end',function(){
-		gridList.push(JSON.parse(data));
+		var list = gridList.filter(function(grid){
+			return JSON.stringify(grid) == data;
+		});
+
+		if(list.length ==0)
+			gridList.push(JSON.parse(data));
 		res.end();
 	})
 }
@@ -38,11 +43,9 @@ var renderFile = function(req, res){
 	});
 };
 
-
-
 var urls = {'/': redirectToIndex,
 		'/save':saveGrid,
-		'/load':loadPrevious}
+		'/load':loadPrevious};
 
 
 var controller = function(req, res){
