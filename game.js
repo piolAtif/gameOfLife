@@ -127,14 +127,18 @@ var clearGrid = function(){
 //xml http request===============================
 
 var save = function(){
-	var http = new XMLHttpRequest();
-	http.onreadystatechange = function(){
-		if(this.readyState == http.DONE && this.status == 200)
-			alert('your pattern is saved');
+	if(grid.isAnyCellAlive()){
+		var http = new XMLHttpRequest();
+		http.onreadystatechange = function(){
+			if(this.readyState == http.DONE && this.status == 200)
+				alert('your pattern is saved');
+		}
+		
+		http.open('POST','/save',true);
+		http.send(JSON.stringify(grid));
 	}
-
-	http.open('POST','/save',true);
-	http.send(JSON.stringify(grid));
+	else
+		alert('There is no patter to save');
 };
 
 var load = function(){
