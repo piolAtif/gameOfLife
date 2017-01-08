@@ -1,4 +1,5 @@
 var fs = require('fs');
+var gridList = [];
 
 var redirectToIndex = function(req, res){
 	res.writeHead(303,{Location:'index.html'});
@@ -6,18 +7,26 @@ var redirectToIndex = function(req, res){
 	res.end();
 }
 
-var saveCoordinate = function(){
+var saveGrid = function(req, res){
+	var data = '';
+	req.on('data',function(chunk){
+		data +=  chunk;
+	})
 
+	req.on('end',function(){
+		gridList.push(JSON.parse(data));
+		res.end();
+	})
 }
 
-var loadPrevious = function(){
-
+var loadPrevious = function(req, res){
+	res.statusCode = 200;
+	res.end(JSON.stringify(gridList));
 }
 
 var renderFile = function(req, res){
 	var filePath = './'+req.url;
 	fs.readFile(filePath, function(error, content){
-	console.log('file path: ',filePath);
 		if(error){
 			res.statusCode = 404;
 			res.end('File not found');
@@ -32,12 +41,11 @@ var renderFile = function(req, res){
 
 
 var urls = {'/': redirectToIndex,
-		'/save':saveCoordinate,
+		'/save':saveGrid,
 		'/load':loadPrevious}
 
 
 var controller = function(req, res){
-	console.log(req.url);
 	if(urls[req.url])
 		urls[req.url](req, res);
 	else

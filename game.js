@@ -124,6 +124,31 @@ var clearGrid = function(){
 	createGrid();
 };
 
+//xml http request===============================
+
+var save = function(){
+	var http = new XMLHttpRequest();
+	http.onreadystatechange = function(){
+		if(this.readyState == http.DONE && this.status == 200)
+			alert('your pattern is saved');
+	}
+
+	http.open('POST','/save',true);
+	http.send(JSON.stringify(grid));
+};
+
+var load = function(){
+
+	var http = new XMLHttpRequest();
+	http.onreadystatechange = function(){
+		if(this.readyState == http.DONE && this.status == 200)
+			console.log('parse is: ',JSON.parse(this.responseText));
+	}
+
+	http.open('GET','/load',true);
+	http.send();
+}
+
 //Create default grid
 
 var defaultGrid = function(){
