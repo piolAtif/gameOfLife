@@ -126,7 +126,7 @@ describe('grid',function(){
 		});
 	});
 
-	describe("Need to change",function(){
+	describe("willBeAlive",function(){
 		var grid = new Grid(1,1);
 			
 		describe('when cell is alive',function(){
