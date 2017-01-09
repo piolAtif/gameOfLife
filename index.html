@@ -9,18 +9,24 @@
 
 </head>
 <body>
-	Row<input type="text" name="row"><br>
-	Column<input type="text" name="column"><br>
-	<button onclick = "createGrid()">ok</button>
-	<div id="grid"></div>
+	<div class="main">
+		<div class="user_interface">
+			Row<input type="text" name="row"><br>
+			Column<input type="text" name="column"><br>
+			<button onclick = "createGrid()">ok</button>
+			<div id="grid"></div>
 
-	<div class="playButtons">
-		<button onclick="next()">Next generation</button>
-		<button id="start" onclick="start()">Start game</button>
-		<button id="pause" onclick="stop()" disabled>Pause</button>
-		<button onclick="clearGrid()">clear</button>
-		<button onclick="save()">Save</button>
-		<button onclick="load()">Load</button>
+			<div class="playButtons">
+				<button onclick="next()">Next generation</button>
+				<button id="start" onclick="start()">Start game</button>
+				<button id="pause" onclick="stop()" disabled>Pause</button>
+				<button onclick="clearGrid()">clear</button>
+				<button onclick="save()">Save</button>
+				<button onclick="load()">Load</button>
+			</div>
+		</div>
+
+		<div id="pattern_list"></div>
 	</div>
 </body>
 </html>

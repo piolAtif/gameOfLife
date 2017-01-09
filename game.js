@@ -67,9 +67,8 @@ var drawADiv = function(divToAdd, row, column,gridToChange, size){
 
 //draw a grid
 
-var drawGrid = function(gridToDraw){
-	var mainDiv = d3.select('#grid');
-	removeGridTable();
+var drawGrid = function(gridToDraw, divId){
+	var mainDiv = d3.select(divId);
 
 	var parentSize = setParentWidthAndHeight(gridToDraw.rows,gridToDraw.columns);
 	var childSize = setChildHeightAndWidth(parentSize,gridToDraw);
@@ -90,8 +89,10 @@ var createGrid = function(){
 	var row = +values[0].value;
 	var column = +values[1].value;
 
+	removeGridTable();
+
 	grid = new Grid(row, column);
-	drawGrid(grid);
+	drawGrid(grid,'#grid');
 };
 
 var  clearPreviousGrid = function(){
@@ -107,7 +108,8 @@ var next = function(){
 		return clearPreviousGrid();
 	score++;
 	grid = grid.nextGeneration();
-	drawGrid(grid);	
+	removeGridTable();	
+	drawGrid(grid,'#grid');	
 }
 
 var start = function(){
@@ -124,6 +126,15 @@ var clearGrid = function(){
 	createGrid();
 };
 
+//===================Method=================
+var renderPatternList = function(gridList){
+	var pattern_list = document.getElementById('pattern_list');
+	gridList.forEach(function(gridToDraw){
+	});
+
+	return gridList;
+}
+
 //xml http request===============================
 
 var save = function(){
@@ -133,7 +144,7 @@ var save = function(){
 			if(this.readyState == http.DONE && this.status == 200)
 				alert('your pattern is saved');
 		}
-		
+
 		http.open('POST','/save',true);
 		http.send(JSON.stringify(grid));
 	}
@@ -142,11 +153,12 @@ var save = function(){
 };
 
 var load = function(){
-
 	var http = new XMLHttpRequest();
 	http.onreadystatechange = function(){
-		if(this.readyState == http.DONE && this.status == 200)
-			console.log('parse is: ',JSON.parse(this.responseText));
+		if(this.readyState == http.DONE && this.status == 200){
+
+			renderPatternList(JSON.parse(this.responseText));
+		}
 	}
 
 	http.open('GET','/load',true);
@@ -164,8 +176,9 @@ var defaultGrid = function(){
 	grid.setCellAsAlive(2,2);
 	grid.setCellAsAlive(3,2);
 
+	removeGridTable();
 	setParentWidthAndHeight(5,5);
-	drawGrid(grid);
+	drawGrid(grid, '#grid');
 };
 
 window.onload = defaultGrid;

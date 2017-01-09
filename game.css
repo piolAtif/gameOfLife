@@ -8,3 +8,13 @@
 	height: 50px;
 }
 
+.user_interface{
+	width: 600px;
+	display: absolute;
+}
+
+#pattern_list{
+	display: inline-block;
+	width: 200px;
+}
+
