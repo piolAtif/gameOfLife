@@ -30,7 +30,7 @@ var loadPrevious = function(req, res){
 }
 
 var renderFile = function(req, res){
-	var filePath = './'+req.url;
+	var filePath = './public/'+req.url;
 	fs.readFile(filePath, function(error, content){
 		if(error){
 			res.statusCode = 404;
