@@ -85,4 +85,4 @@ Grid.prototype = {
 	}
 };
 
-// module.exports = Grid;
+module.exports = Grid;

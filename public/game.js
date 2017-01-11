@@ -130,6 +130,7 @@ var clearGrid = function(){
 var renderPatternList = function(gridList){
 	var pattern_list = document.getElementById('pattern_list');
 	gridList.forEach(function(gridToDraw){
+		drawGrid(gridToDraw, '#pattern_list');
 	});
 
 	return gridList;
