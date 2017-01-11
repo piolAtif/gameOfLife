@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Grid = require('../src/grid.js');
+var Grid = require('../public/src/grid.js');
 
 describe('grid',function(){
 	
