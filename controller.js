@@ -2,11 +2,33 @@ var fs = require('fs');
 var gridList = [];
 var https = require('https');
 var url = require('url');
+var facebookInterface = require('./facebookInterface');
 
 var redirectToIndex = function(req, res){
 	res.writeHead(303,{Location:'index.html'});
 	res.statusCode = 303;
 	res.end();
+}
+
+var isValidPatternName = function(name, patternList){
+	return (name.length !=0) && (patternList[name] == undefined);
+}
+
+var isPatternExists = function(grid, patternList){
+	for(pattern in patternList){
+		if(JSON.stringify(grid) == JSON.stringify(patternList[pattern]))
+			return true;
+	}
+	return false;
+}
+
+var canAddToList = function(newPattern ,patternList,response){
+	if(isValidPatternName(newPattern.name, patternList)){
+		if(isPatternExists(newPattern.grid, patternList))
+			response.end('pattern is already exists');
+		return true;
+	}
+	response.end('Invalid pattern name or pattern name is already exists')
 }
 
 var saveGrid = function(req, res){
@@ -16,13 +38,15 @@ var saveGrid = function(req, res){
 	})
 
 	req.on('end',function(){
-		var list = gridList.filter(function(grid){
-			return JSON.stringify(grid) == data;
-		});
+		var contentToAdd = JSON.parse(data);
+		var jsonContent = fs.readFileSync('./pattern.JSON','utf-8');
+		var patternList = JSON.parse(jsonContent);
 
-		if(list.length ==0)
-			gridList.push(JSON.parse(data));
-		res.end();
+		if(canAddToList(contentToAdd, patternList,res)){
+			patternList[contentToAdd.name] = contentToAdd.grid;
+			fs.writeFileSync('./pattern.JSON',JSON.stringify(patternList));
+			res.end('your pattern has saved');
+		}
 	})
 }
 
@@ -87,7 +111,8 @@ var getUserId = function(token, globalRes){
 	facebookReq.end();
 }
 
-var getAccessToken = function(req, globalRes){
+
+var getAccessToken = function(req, globalRes){	
 	var query = url.parse(req.url).query;
 
 	var accessTokeUrl = 'https://graph.facebook.com/v2.8/oauth/access_token?'
@@ -95,6 +120,7 @@ var getAccessToken = function(req, globalRes){
 		+'&client_secret='+process.env.client_secret
 		+'&redirect_uri=http://127.0.0.1:8000/accessToken'
 		+'&'+query;
+
 
 
 	var accessToken = function(facebookRes){
@@ -112,6 +138,14 @@ var getAccessToken = function(req, globalRes){
 
 	var facebookReq = https.request(accessTokeUrl, accessToken);
 	facebookReq.end();
+	// var access_token;
+	
+	// var setAccessToken = function(token){
+	// 	access_token = token;
+	// 	res.end();
+	// }
+
+	// facebookInterface(req, res, setAccessToken);
 }
 
 var authenticUser = function(req, res){
