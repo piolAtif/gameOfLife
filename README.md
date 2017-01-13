@@ -1,9 +1,7 @@
 # Game of life
  'Game of life' is based on [conway game of life](https://en.wikipedia.org/wiki/Conway's_Game_of_Life).
 
- 
- 
- ## Description
+## Description
  
   'Game of life' also known as <b>Life</b>.
 The game starts by its initial state, requiring no further input.
