@@ -141,19 +141,18 @@ var renderPatternList = function(gridList){
 var save = function(){
 	if(grid.isAnyCellAlive()){
 		var name = prompt('Enter your name','');
-		var pattern = {};
-		pattern[name] = grid;
+		var pattern = {name: name, grid:grid}; 
 		var http = new XMLHttpRequest();
 		http.onreadystatechange = function(){
 			if(this.readyState == http.DONE && this.status == 200)
-				alert('Your pattern has saved');
+				alert(this.responseText);
 		}
 
 		http.open('POST','/save',true);
 		http.send(JSON.stringify(pattern));
 	}
 	else
-		alert('There is no patter to save');
+		alert('There is no pattern to save');
 };
 
 var load = function(){
