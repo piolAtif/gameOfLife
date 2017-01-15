@@ -11,7 +11,9 @@ var redirectToIndex = function(req, res){
 }
 
 var isValidPatternName = function(name, patternList){
-	return (name.length !=0) && (patternList[name] == undefined);
+	if(name)
+		return (name.length !=0) && (patternList[name] == undefined);
+	return false;
 }
 
 var isPatternExists = function(grid, patternList){
@@ -24,8 +26,10 @@ var isPatternExists = function(grid, patternList){
 
 var canAddToList = function(newPattern ,patternList,response){
 	if(isValidPatternName(newPattern.name, patternList)){
-		if(isPatternExists(newPattern.grid, patternList))
+		if(isPatternExists(newPattern.grid, patternList)){
 			response.end('pattern is already exists');
+			return false;
+		}
 		return true;
 	}
 	response.end('Invalid pattern name or pattern name is already exists')
@@ -50,9 +54,10 @@ var saveGrid = function(req, res){
 	})
 }
 
-var loadPrevious = function(req, res){
+var loadPatterns = function(req, res){
+	var patternList= fs.readFileSync('./pattern.JSON','utf-8');
 	res.statusCode = 200;
-	res.end(JSON.stringify(gridList));
+	res.end(patternList);
 }
 
 var renderFile = function(req, res){
@@ -158,7 +163,7 @@ var authenticUser = function(req, res){
 
 var urls = {'/': redirectToIndex,
 		'/save':saveGrid,
-		'/load':loadPrevious,
+		'/load':loadPatterns,
 		'/facebookAuth':authenticUser,
 		'/accessToken':getAccessToken};
 
