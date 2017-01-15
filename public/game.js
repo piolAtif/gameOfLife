@@ -68,6 +68,8 @@ var drawADiv = function(divToAdd, row, column,gridToChange, size){
 //draw a grid
 
 var drawGrid = function(gridToDraw, divId){
+	console.log('div id: ',divId);
+	console.log('gridToDraw ',gridToDraw);
 	var mainDiv = d3.select(divId);
 
 	var parentSize = setParentWidthAndHeight(gridToDraw.rows,gridToDraw.columns);
@@ -128,12 +130,15 @@ var clearGrid = function(){
 
 //===================Method=================
 var renderPatternList = function(gridList){
-	var pattern_list = document.getElementById('pattern_list');
-	gridList.forEach(function(gridToDraw){
-		drawGrid(gridToDraw, '#pattern_list');
-	});
-
-	return gridList;
+	var patterns = d3.select('#pattern_list');
+	d3.selectAll('.pattern').remove();
+	var counter = 0;
+	for(gridToDraw in gridList){
+		var pattern_id = 'pattern_'+counter;
+		patterns.append('div').attr('id',pattern_id).attr('class','pattern');
+		drawGrid(gridList[gridToDraw], '#'+pattern_id);
+		counter++;
+	}
 }
 
 //xml http request===============================
@@ -159,8 +164,8 @@ var load = function(){
 	var http = new XMLHttpRequest();
 	http.onreadystatechange = function(){
 		if(this.readyState == http.DONE && this.status == 200){
-
 			renderPatternList(JSON.parse(this.responseText));
+			// document.getElementById('load').disabled = true;
 		}
 	}
 
