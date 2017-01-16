@@ -1,3 +1,6 @@
+const PATTERN_HEIGHT = 200;
+const PATTERN_WIDTH = 200;
+
 var grid;
 var interval;
 var score = 0;
@@ -18,11 +21,11 @@ var getValue = function(grid, row, column){
 
 
 var removeGridTable = function(){
-	d3.selectAll('#childDiv').remove();
+	d3.selectAll('.childDiv').remove();
 };
 
 var setChildHeightAndWidth = function(parentSize, gridToDraw){
-	var childHeight = parentSize[0]/gridToDraw.rows
+	var childHeight = parentSize[0]/gridToDraw.rows;
 	var childWidth = parentSize[1]/gridToDraw.columns;
 	return [childHeight, childWidth];
 };
@@ -67,21 +70,49 @@ var drawADiv = function(divToAdd, row, column,gridToChange, size){
 
 //draw a grid
 
-var drawGrid = function(gridToDraw, divId){
-	console.log('div id: ',divId);
-	console.log('gridToDraw ',gridToDraw);
-	var mainDiv = d3.select(divId);
+var drawGrid = function(gridToDraw){
+	var mainDiv = d3.select('#grid');
+
+	removeGridTable();
 
 	var parentSize = setParentWidthAndHeight(gridToDraw.rows,gridToDraw.columns);
 	var childSize = setChildHeightAndWidth(parentSize,gridToDraw);
 
 	for (var i = 0; i < gridToDraw.rows; i++) {
-		var parentDiv = mainDiv.append('div').attr('id','childDiv');
+		var parentDiv = mainDiv.append('div').attr('class','childDiv');
 		for (var j = 0; j < gridToDraw.columns; j++) {
 			drawADiv(parentDiv,i,j, gridToDraw, childSize);
 		};
 	};
 };
+
+var drawPatternGrid = function(gridToDraw, divId){
+	var mainDiv = d3.select(divId);
+
+	var parentSize = [PATTERN_HEIGHT, PATTERN_WIDTH];
+	var childSize = setChildHeightAndWidth(parentSize,gridToDraw);
+
+	for (var i = 0; i < gridToDraw.rows; i++) {
+		var parentDiv = mainDiv.append('div').attr('class','pattern_child_div');
+		for (var j = 0; j < gridToDraw.columns; j++) {
+			drawADiv(parentDiv,i,j, gridToDraw, childSize);
+		};
+	};
+
+}
+
+
+var renderPatternList = function(gridList){
+	var patterns = d3.select('#pattern_list');
+	d3.selectAll('.pattern').remove();
+	var counter = 0;
+	for(gridToDraw in gridList){
+		var pattern_id = 'pattern_'+counter;
+		patterns.append('div').attr('id',pattern_id).attr('class','pattern');
+		drawPatternGrid(gridList[gridToDraw], '#'+pattern_id);
+		counter++;
+	}
+}
 
 //=========================Button==========================
 
@@ -91,10 +122,8 @@ var createGrid = function(){
 	var row = +values[0].value;
 	var column = +values[1].value;
 
-	removeGridTable();
-
 	grid = new Grid(row, column);
-	drawGrid(grid,'#grid');
+	drawGrid(grid);
 };
 
 var  clearPreviousGrid = function(){
@@ -110,8 +139,7 @@ var next = function(){
 		return clearPreviousGrid();
 	score++;
 	grid = grid.nextGeneration();
-	removeGridTable();	
-	drawGrid(grid,'#grid');	
+	drawGrid(grid);	
 }
 
 var start = function(){
@@ -127,19 +155,6 @@ var stop = function(){
 var clearGrid = function(){
 	createGrid();
 };
-
-//===================Method=================
-var renderPatternList = function(gridList){
-	var patterns = d3.select('#pattern_list');
-	d3.selectAll('.pattern').remove();
-	var counter = 0;
-	for(gridToDraw in gridList){
-		var pattern_id = 'pattern_'+counter;
-		patterns.append('div').attr('id',pattern_id).attr('class','pattern');
-		drawGrid(gridList[gridToDraw], '#'+pattern_id);
-		counter++;
-	}
-}
 
 //xml http request===============================
 
@@ -161,12 +176,10 @@ var save = function(){
 };
 
 var load = function(){
-	var http = new XMLHttpRequest();
+	var http =new XMLHttpRequest();
 	http.onreadystatechange = function(){
-		if(this.readyState == http.DONE && this.status == 200){
+		if(this.readyState == http.DONE && this.status == 200)
 			renderPatternList(JSON.parse(this.responseText));
-			// document.getElementById('load').disabled = true;
-		}
 	}
 
 	http.open('GET','/load',true);
@@ -184,9 +197,8 @@ var defaultGrid = function(){
 	grid.setCellAsAlive(2,2);
 	grid.setCellAsAlive(3,2);
 
-	removeGridTable();
 	setParentWidthAndHeight(5,5);
-	drawGrid(grid, '#grid');
+	drawGrid(grid);
 };
 
 window.onload = defaultGrid;

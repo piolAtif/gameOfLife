@@ -1,20 +1,29 @@
-#childDiv{
+.childDiv{
 	display: -webkit-box;
 }
 
-#childDiv div{
+.childDiv div{
 	border: 1px solid rgba(12,10,12,0.06);
 	width: 50px;
 	height: 50px;
 }
 
+.pattern{
+	
+	height: 200px;
+	width: 200px;
+}
+
+.pattern_child_div{
+	display: flex;
+}
+
+.pattern_child_div div{
+	border: 1px solid rgba(12,10,12,0.06);
+}
+
 .user_interface{
 	width: 600px;
 	display: absolute;
-}
-
-#pattern_list{
-	display: inline-block;
-	width: 200px;
 }
 
