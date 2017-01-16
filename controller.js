@@ -1,5 +1,4 @@
 var fs = require('fs');
-var gridList = [];
 var https = require('https');
 var url = require('url');
 var facebookInterface = require('./facebookInterface');
