@@ -1,86 +1,54 @@
-var createTable = function(rows, columns){
-	var table = [];
-	for (var i = 0; i < rows; i++) {
-		table[i] = [];
-		for (var j = 0; j < columns; j++) {	
-			table[i][j] = 'D';	
-		}
-	}
-	return table;
+var contains = function(list,cell){
+	var cellsLength = list.filter(function(aliveCell){
+		return JSON.stringify(aliveCell) == JSON.stringify(cell);
+	}).length;
+
+	return cellsLength>0;
 }
 
-var viceVersaOf = {'A':'D','D':'A'};
-
+//create grid
 var Grid = function(rows, columns){
 	this.rows = rows;
 	this.columns = columns;
-	this.table = createTable(this.rows, this.columns);
+	this.aliveCellList = [];
 }
 
 Grid.prototype = {
 	setCellAsAlive:function(rowId, columnId){
-		this.table[rowId][columnId] = 'A';
-	},
-
-	reverse:function(rowId,columnId){
-		var cell = this.table[rowId][columnId];
-		this.table[rowId][columnId] = viceVersaOf[cell];
-	},
-
-	willBeAlive:function(cell, aliveAdjacents){
-		return (aliveAdjacents==3 ||(aliveAdjacents==2 && cell=='A'))
-	},
-
-	nextStateOf:function(rowId, columnId){
-		var cell = this.table[rowId][columnId];
-		var count = this.adjacentAliveCells(rowId, columnId).length;
-		if(this.willBeAlive(cell, count))
-			return 'A';
-		return 'D'
-	},
-
-	isAnyCellAlive:function(){
-		var count = 0;
-		for (var i = 0; i < this.rows; i++) {
-			for (var j = 0; j < this.columns; j++) {
-				if(this.isAliveCell(i,j))
-					return true;
-			}
-		}
-		return false;
-	},
-
-	isAliveCell:function(row, column){
-		if(this.table[row]){
-			if(this.table[row][column] == 'A')
-				return true;
-		}
-		return false;
+		this.aliveCellList.push([rowId, columnId]);
 	},
 
 	adjacentAliveCells:function(rowId, columnId){
 		var adjacentsTable = [];
-		var rowNumbers = [-1,-1,-1,0,0,1,1,1];
-		var colNumbers = [-1,0,1,-1,1,-1,0,1];
+			var rowNumbers = [-1,-1,-1,0,0,1,1,1];
+			var colNumbers = [-1,0,1,-1,1,-1,0,1];
 
-		for (var i = 0; i < 8; i++) {
-			var row = rowId+rowNumbers[i];
-			var column = columnId+colNumbers[i];
+			for (var i = 0; i < 8; i++) {
+				var row = rowId+rowNumbers[i];
+				var column = columnId+colNumbers[i];
+				var cell = [row, column];
 
-			if(this.isAliveCell(row,column))
-				adjacentsTable.push([row, column]);
-		}
+				if(contains(this.aliveCellList,[row, column]))
+					adjacentsTable.push([row, column]);
+			}
 		return adjacentsTable;
+	},
+
+	willBeAlive:function(rowId, columnId){
+		var cell = [rowId, columnId];
+		var count = this.adjacentAliveCells(rowId, columnId).length;
+		return (count==3 ||(count==2 && contains(this.aliveCellList, cell)));
 	},
 	
 	nextGeneration:function(){
-		var newTable = createTable(this.rows, this.columns);
+		var newAliveCellList = [];
 		for (var i = 0; i < this.rows; i++) {
 			for (var j = 0; j < this.columns; j++) {
-				newTable[i][j] = this.nextStateOf(i,j);
+				if(this.willBeAlive(i,j))
+					newAliveCellList.push([i,j]);
 			}
 		}
-		this.table = newTable;
+		this.aliveCellList = newAliveCellList;
 		return this;
 	}
 };
