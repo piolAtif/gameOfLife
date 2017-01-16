@@ -190,12 +190,12 @@ describe('grid',function(){
 		});
 	});
 
-	describe('adjacentAliveCells',function(){
+	describe('neighbourAliveCells',function(){
 
 		it("should return empty list for a 1*1 table",function(){
 			var grid = new Grid(1,1);
 
-			var neighbouringCells = grid.adjacentAliveCells(0,0);
+			var neighbouringCells = grid.neighbourAliveCells(0,0);
 
 			assert.equal(0,neighbouringCells.length);
 		});
@@ -204,8 +204,8 @@ describe('grid',function(){
 			var grid = new Grid(1,2);
 			grid.setCellAsAlive(0,0);
 			
-			var _00thCellAdjacents = grid.adjacentAliveCells(0,0);
-			var _01thCellAdjacents = grid.adjacentAliveCells(0,1);
+			var _00thCellAdjacents = grid.neighbourAliveCells(0,0);
+			var _01thCellAdjacents = grid.neighbourAliveCells(0,1);
 
 			assert.equal(0, _00thCellAdjacents.length);
 			assert.equal(1, _01thCellAdjacents.length);
@@ -218,9 +218,9 @@ describe('grid',function(){
 			grid.setCellAsAlive(0,2);
 			grid.setCellAsAlive(1,1);
 
-			var _00thCellAdjacents = grid.adjacentAliveCells(0,0);
-			var _11thCellAdjacents = grid.adjacentAliveCells(1,1);
-			var _01thCellAdjacents = grid.adjacentAliveCells(0,1);
+			var _00thCellAdjacents = grid.neighbourAliveCells(0,0);
+			var _11thCellAdjacents = grid.neighbourAliveCells(1,1);
+			var _01thCellAdjacents = grid.neighbourAliveCells(0,1);
 
 			assert.equal(1, _00thCellAdjacents.length);
 			assert.deepEqual([[1,1]], _00thCellAdjacents);
