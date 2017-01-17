@@ -83,7 +83,7 @@ var drawGrid = function(gridToDraw){
 
 //================================Draw pattern list===========================
 
-var getMinMaxOf = function(list, index){
+var maxAndMinOf = function(list, index){
 	return {
 		min:Math.min.apply(list[0][index],list.map(function(cell){
 			return cell[index]
@@ -101,11 +101,46 @@ var drawPattern = function(divToAdd, row,column){
  		.style('background-color',colorOf(row,column,this));
 }
 
-var drawPatternGrid = function(gridTable, parentId){
-	var mainDiv = d3.select(parentId);
+var getRowAndColumnRange = function(list){
+	var row = maxAndMinOf(list, 0);
+	var column = maxAndMinOf(list, 1);
+	return [row, column];
+}
 
- 	var row = getMinMaxOf(gridTable, 0);
- 	var column = getMinMaxOf(gridTable, 1);
+var getRange = function(list){
+	var range = getRowAndColumnRange(list);
+	return [range[0].max-range[0].min, range[1].max-range[1].min];
+}
+
+var needToextendSize = function(rangeToCheck, rangeOfList){
+	var range = getRowAndColumnRange([rangeToCheck, rangeOfList]);
+	var maxRange = [range[0].max, range[1].max];
+	return JSON.stringify(maxRange) > JSON.stringify(rangeToCheck);
+}
+
+var createNewGrid = function(gridToChange, table){
+		var tableRange = getRange(table);
+		var gridRange = [gridToChange['rows'], gridToChange['columns']];
+
+		if(needToextendSize(gridRange, tableRange)){
+			var range = getRowAndColumnRange(table);
+			gridToChange.rows = range[0].max;
+			gridToChange.columns = range[1].max;
+		}
+
+		gridToChange.aliveCellList = table;
+		return gridToChange;
+};
+
+var drawPatternGrid = function(gridTable, parentId){
+	var mainDiv = d3.select(parentId).append('div').attr('class','patterns')
+		.on('click',function(){
+			var gridToDraw = createNewGrid(grid, gridTable);
+			drawGrid(gridToDraw);
+		});
+
+ 	var row = maxAndMinOf(gridTable, 0);
+ 	var column = maxAndMinOf(gridTable, 1);
 
  	for (var i = row.min; i <= row.max; i++) {
 		var parentDiv = mainDiv.append('div').attr('class','pattern_child_div');
@@ -173,11 +208,21 @@ var clearGrid = function(){
 };
 
 // //xml http request===============================
+var transportToZero = function(list){
+	var minR = maxAndMinOf(list, 0).min;
+	var minC = maxAndMinOf(list, 1).min;
+	return list.map(function(cell){
+		cell[0] = cell[0]-minR;
+		cell[1] = cell[1]-minC;
+		return cell;
+	})
+}
 
 var save = function(){
 	if(grid.aliveCellList.length>0){
 		var name = prompt('Enter your name','');
-		var pattern = {name: name, aliveCells:grid.aliveCellList}; 
+		var cells = transportToZero(grid.aliveCellList);
+		var pattern = {name: name, aliveCells:cells}; 
 		var http = new XMLHttpRequest();
 		http.onreadystatechange = function(){
 			if(this.readyState == http.DONE && this.status == 200)
