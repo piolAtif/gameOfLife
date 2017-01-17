@@ -41,9 +41,9 @@ var makeClickableStartOrPause = function(startValue, pauseValue){
 	document.getElementById('start').disabled = startValue;
 }
 
-// //================================Draw part=====================
+//================================Draw part=====================
 
-var color = {'true':d3.scaleOrdinal(d3.schemeCategory10),
+var color = {'true':function(){return '#000000'},
 	'false':function(){return '#ffffff'}};
 
 var colorOf = function(row, column, list){

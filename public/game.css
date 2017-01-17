@@ -3,7 +3,7 @@
 }
 
 .childDiv div{
-	border: 1px solid rgba(12,10,12,0.06);
+	border: 1px solid lightgray;
 	width: 50px;
 	height: 50px;
 }	
@@ -13,12 +13,12 @@
 }
 
 .pattern_child_div div{
-	border: 1px solid rgba(12,10,12,0.06);
+	border: 1px solid lightgray;
 }
 
 .user_interface{
-	width: 600px;
-	display: absolute;
+	width: 800px;
+	height: 600px;
 }
 
 .main{
