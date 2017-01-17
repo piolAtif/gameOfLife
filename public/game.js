@@ -85,10 +85,10 @@ var drawGrid = function(gridToDraw){
 
 var maxAndMinOf = function(list, index){
 	return {
-		min:Math.min.apply(list[0][index],list.map(function(cell){
+		min:Math.min.apply(Infinity,list.map(function(cell){
 			return cell[index]
 		})),
-		max:Math.max.apply(list[0][index],list.map(function(cell){
+		max:Math.max.apply(-Infinity,list.map(function(cell){
 			return cell[index]
 		}))
 	};
@@ -109,25 +109,22 @@ var getRowAndColumnRange = function(list){
 
 var getRange = function(list){
 	var range = getRowAndColumnRange(list);
-	return [range[0].max-range[0].min, range[1].max-range[1].min];
+	return [(range[0].max-range[0].min)+1, (range[1].max-range[1].min)+1];
 }
 
-var needToextendSize = function(rangeToCheck, rangeOfList){
+var newSizeOfGrid = function(rangeToCheck, rangeOfList){
 	var range = getRowAndColumnRange([rangeToCheck, rangeOfList]);
-	var maxRange = [range[0].max, range[1].max];
-	return JSON.stringify(maxRange) > JSON.stringify(rangeToCheck);
+	return [range[0].max, range[1].max];	
+
 }
 
 var createNewGrid = function(gridToChange, table){
 		var tableRange = getRange(table);
 		var gridRange = [gridToChange['rows'], gridToChange['columns']];
 
-		if(needToextendSize(gridRange, tableRange)){
-			var range = getRowAndColumnRange(table);
-			gridToChange.rows = range[0].max;
-			gridToChange.columns = range[1].max;
-		}
-
+		var range = newSizeOfGrid(gridRange, tableRange);
+		gridToChange.rows = range[0];
+		gridToChange.columns = range[1];
 		gridToChange.aliveCellList = table;
 		return gridToChange;
 };
