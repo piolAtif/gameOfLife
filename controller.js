@@ -15,9 +15,9 @@ var isValidPatternName = function(name, patternList){
 	return false;
 }
 
-var isPatternExists = function(grid, patternList){
+var isPatternExists = function(aliveCells, patternList){
 	for(pattern in patternList){
-		if(JSON.stringify(grid) == JSON.stringify(patternList[pattern]))
+		if(JSON.stringify(aliveCells) == JSON.stringify(patternList[pattern]))
 			return true;
 	}
 	return false;
@@ -25,7 +25,7 @@ var isPatternExists = function(grid, patternList){
 
 var canAddToList = function(newPattern ,patternList,response){
 	if(isValidPatternName(newPattern.name, patternList)){
-		if(isPatternExists(newPattern.grid, patternList)){
+		if(isPatternExists(newPattern.aliveCells, patternList)){
 			response.end('pattern is already exists');
 			return false;
 		}
@@ -46,7 +46,7 @@ var saveGrid = function(req, res){
 		var patternList = JSON.parse(jsonContent);
 
 		if(canAddToList(contentToAdd, patternList,res)){
-			patternList[contentToAdd.name] = contentToAdd.grid;
+			patternList[contentToAdd.name] = contentToAdd.aliveCells;
 			fs.writeFileSync('./pattern.JSON',JSON.stringify(patternList));
 			res.end('your pattern has saved');
 		}
