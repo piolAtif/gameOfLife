@@ -5,20 +5,11 @@ var grid;
 var interval;
 var score = 0;
 
-var color = {'A':d3.scaleOrdinal(d3.schemeCategory10),
-			'D':function(i){return '#ffffff';}
-		};
-
 var getRowAndColumn = function(){
 	var row = document.getElementsByName('row')[0];
 	var column = document.getElementsByName('column')[0];
 	return [row,column];
 }
-
-var getValue = function(grid, row, column){
-	return grid.table[row][column];
-}
-
 
 var removeGridTable = function(){
 	d3.selectAll('.childDiv').remove();
@@ -31,9 +22,7 @@ var setChildHeightAndWidth = function(parentSize, gridToDraw){
 };
 
 var inRange = function(value){
-	if(value<=500)
-		return value;
-	return 500;
+	return value<500?value:500;
 }
 
 var setParentWidthAndHeight = function(row, column){
@@ -52,23 +41,29 @@ var makeClickableStartOrPause = function(startValue, pauseValue){
 	document.getElementById('start').disabled = startValue;
 }
 
-//================================Draw part=====================
+// //================================Draw part=====================
+
+var color = {'true':d3.scaleOrdinal(d3.schemeCategory10),
+	'false':function(){return '#ffffff'}};
+
+var colorOf = function(row, column, list){
+	var cell = [row, column];
+	return color[contains(list, cell)](row+column);
+}
 
 var drawADiv = function(divToAdd, row, column,gridToChange, size){
-
-	var cell = getValue(gridToChange, row, column);
+	var cell = [row, column];
 	divToAdd.append("div")
-	.style('background-color',color[cell](row+column))
 	.style('height',size[0]+'px')
 	.style('width', size[1]+'px')
+	.style('background-color',colorOf(row, column, gridToChange.aliveCellList))
 	.on('click',function(){
 		gridToChange.reverse(row, column);
-		cell = getValue(gridToChange, row, column);
-		this.style['background-color'] = color[cell](row+column);
+		this.style['background-color'] = colorOf(row, column, gridToChange.aliveCellList);
 	});
 };
 
-//draw a grid
+// //draw a grid
 
 var drawGrid = function(gridToDraw){
 	var mainDiv = d3.select('#grid');
@@ -86,35 +81,56 @@ var drawGrid = function(gridToDraw){
 	};
 };
 
-var drawPatternGrid = function(gridToDraw, divId){
-	var mainDiv = d3.select(divId);
+//================================Draw pattern list===========================
 
-	var parentSize = [PATTERN_HEIGHT, PATTERN_WIDTH];
-	var childSize = setChildHeightAndWidth(parentSize,gridToDraw);
-
-	for (var i = 0; i < gridToDraw.rows; i++) {
-		var parentDiv = mainDiv.append('div').attr('class','pattern_child_div');
-		for (var j = 0; j < gridToDraw.columns; j++) {
-			drawADiv(parentDiv,i,j, gridToDraw, childSize);
-		};
+var getMinMaxOf = function(list, index){
+	return {
+		min:Math.min.apply(list[0][index],list.map(function(cell){
+			return cell[index]
+		})),
+		max:Math.max.apply(list[0][index],list.map(function(cell){
+			return cell[index]
+		}))
 	};
-
 }
+
+var drawPattern = function(divToAdd, row,column){
+	divToAdd.append('div')
+		.style('height','20px')
+		.style('width','20px')
+ 		.style('background-color',colorOf(row,column,this));
+}
+
+var drawPatternGrid = function(gridTable, parentId){
+	var mainDiv = d3.select(parentId);
+
+ 	var row = getMinMaxOf(gridTable, 0);
+ 	var column = getMinMaxOf(gridTable, 1);
+
+ 	for (var i = row.min; i <= row.max; i++) {
+		var parentDiv = mainDiv.append('div').attr('class','pattern_child_div');
+ 		for (var j = column.min; j <= column.max; j++) {
+ 			drawPattern.call(gridTable,parentDiv, i,j);		
+ 		}
+ 	}
+};
 
 
 var renderPatternList = function(gridList){
-	var patterns = d3.select('#pattern_list');
+	var patterns = d3.select('.pattern_list');
 	d3.selectAll('.pattern').remove();
 	var counter = 0;
-	for(gridToDraw in gridList){
+	for(gridName in gridList){
 		var pattern_id = 'pattern_'+counter;
-		patterns.append('div').attr('id',pattern_id).attr('class','pattern');
-		drawPatternGrid(gridList[gridToDraw], '#'+pattern_id);
+		patterns.append('fieldset').attr('id',pattern_id)
+		.attr('class','pattern')
+		.html('<legend>'+gridName+'</legend>');
+		drawPatternGrid(gridList[gridName], '#'+pattern_id);
 		counter++;
 	}
 }
 
-//=========================Button==========================
+// //=========================Button==========================
 
 //after click on Ok button
 var createGrid = function(){
@@ -126,7 +142,7 @@ var createGrid = function(){
 	drawGrid(grid);
 };
 
-var  clearPreviousGrid = function(){
+var clearPreviousGrid = function(){
 	alert('your score is:'+score);
 	score = 0;
 	clearInterval(interval);
@@ -135,7 +151,7 @@ var  clearPreviousGrid = function(){
 
 
 var next = function(){
-	if(!grid.isAnyCellAlive())
+	if(!(grid.aliveCellList.length>0))
 		return clearPreviousGrid();
 	score++;
 	grid = grid.nextGeneration();
@@ -156,12 +172,12 @@ var clearGrid = function(){
 	createGrid();
 };
 
-//xml http request===============================
+// //xml http request===============================
 
 var save = function(){
-	if(grid.isAnyCellAlive()){
+	if(grid.aliveCellList.length>0){
 		var name = prompt('Enter your name','');
-		var pattern = {name: name, grid:grid}; 
+		var pattern = {name: name, aliveCells:grid.aliveCellList}; 
 		var http = new XMLHttpRequest();
 		http.onreadystatechange = function(){
 			if(this.readyState == http.DONE && this.status == 200)
@@ -186,7 +202,8 @@ var load = function(){
 	http.send();
 }
 
-//Create default grid
+
+// //Create default grid
 
 var defaultGrid = function(){
 	var values = getRowAndColumn();
@@ -197,7 +214,6 @@ var defaultGrid = function(){
 	grid.setCellAsAlive(2,2);
 	grid.setCellAsAlive(3,2);
 
-	setParentWidthAndHeight(5,5);
 	drawGrid(grid);
 };
 
