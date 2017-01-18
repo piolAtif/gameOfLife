@@ -3,8 +3,8 @@ var https = require('https');
 var url = require('url');
 var facebookInterface = require('./facebookInterface');
 
-var redirectToIndex = function(req, res){
-	res.writeHead(303,{Location:'index.html'});
+var redirectToFacebook = function(req, res){
+	res.writeHead(303,{Location:'/facebookAuth'});
 	res.statusCode = 303;
 	res.end();
 }
@@ -142,14 +142,6 @@ var getAccessToken = function(req, globalRes){
 
 	var facebookReq = https.request(accessTokeUrl, accessToken);
 	facebookReq.end();
-	// var access_token;
-	
-	// var setAccessToken = function(token){
-	// 	access_token = token;
-	// 	res.end();
-	// }
-
-	// facebookInterface(req, res, setAccessToken);
 }
 
 var authenticUser = function(req, res){
@@ -160,7 +152,7 @@ var authenticUser = function(req, res){
 	res.end();
 }
 
-var urls = {'/': redirectToIndex,
+var urls = {'/': redirectToFacebook,
 		'/save':saveGrid,
 		'/load':loadPatterns,
 		'/facebookAuth':authenticUser,
