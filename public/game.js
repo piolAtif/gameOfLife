@@ -4,6 +4,7 @@ const PATTERN_WIDTH = 200;
 var grid;
 var interval;
 var score = 0;
+var initialGrid;
 
 var getRowAndColumn = function(){
 	var row = document.getElementsByName('row')[0];
@@ -171,6 +172,7 @@ var createGrid = function(){
 	var column = +values[1].value;
 
 	grid = new Grid(row, column);
+	initialGrid = null;
 	drawGrid(grid);
 };
 
@@ -191,6 +193,8 @@ var next = function(){
 }
 
 var start = function(){
+	if(!initialGrid)
+		initialGrid = JSON.parse(JSON.stringify(grid));
 	makeClickableStartOrPause(true, false);
 	interval = window.setInterval(next, 300);
 }
@@ -216,9 +220,9 @@ var transportToZero = function(list){
 }
 
 var save = function(){
-	if(grid.aliveCellList.length>0){
+	if(initialGrid){
 		var name = prompt('Enter your name','');
-		var cells = transportToZero(grid.aliveCellList);
+		var cells = transportToZero(initialGrid.aliveCellList);
 		var pattern = {name: name, aliveCells:cells}; 
 		var http = new XMLHttpRequest();
 		http.onreadystatechange = function(){
@@ -256,6 +260,7 @@ var defaultGrid = function(){
 	grid.setCellAsAlive(2,2);
 	grid.setCellAsAlive(3,2);
 
+	initialGrid = JSON.parse(JSON.stringify(grid));
 	drawGrid(grid);
 };
 

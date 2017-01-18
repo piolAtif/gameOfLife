@@ -1,9 +1,15 @@
+#grid {
+	display: table;
+	border-collapse: collapse;
+}
 .childDiv{
-	display: -webkit-box;
+	display: table-row;
+
 }
 
 .childDiv div{
 	border: 1px solid lightgray;
+	display: table-cell;
 	width: 50px;
 	height: 50px;
 }	
@@ -13,7 +19,8 @@
 }
 
 .pattern_child_div div{
-	border: 1px solid lightgray;
+	border-top: 1px solid lightgray;
+	border-left: 1px solid lightgray;
 }
 
 .user_interface{
