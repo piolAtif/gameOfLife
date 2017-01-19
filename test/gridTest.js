@@ -85,6 +85,13 @@ describe('grid',function(){
 				grid.setCellAsAlive(2,2);
 				grid.setCellAsAlive(3,2);
 			});
+
+			var generateGeneration = function(grid,times){
+				for (var i = 0; i < times; i++) {
+					grid = grid.nextGeneration();
+				}
+				return grid;
+			}
 			
 
 			it('should return first generation of given grid',function(){
@@ -114,11 +121,7 @@ describe('grid',function(){
 
 			it('All cells should be dead in eight th generation',function(){
 				var grid = new Grid(4,4);
-
-				for (var i = 0; i < 8; i++) {
-					grid = grid.nextGeneration();
-				}
-
+				grid = generateGeneration(grid, 8);
 				var expectedGrid = new Grid(4,4);
 
 				assert.deepEqual(expectedGrid,grid);
