@@ -1,3 +1,6 @@
+const THREE_NEIGHBOURS = 3;
+const TWO_NEIGHBOURS = 2;
+
 var isEqual = function(cell1, cell2){
 	return JSON.stringify(cell1) == JSON.stringify(cell2);
 }
@@ -44,7 +47,7 @@ Grid.prototype = {
 		var rows = [-1,-1,-1,0,0,1,1,1];
 		var columns = [-1,0,1,-1,1,-1,0,1];
 
-		for (var i = 0; i < 8; i++) {
+		for (var i = 0; i < rows.length; i++) {
 			var cell = [rowId+rows[i], columnId+columns[i]];
 			if(contains(this.aliveCellList,cell))
 				adjacentsTable.push(cell);
@@ -56,7 +59,8 @@ Grid.prototype = {
 	willBeAlive:function(rowId, columnId){
 		var cell = [rowId, columnId];
 		var count = this.neighbourAliveCells(rowId, columnId).length;
-		return (count==3 ||(count==2 && contains(this.aliveCellList, cell)));
+		var isAlive = contains(this.aliveCellList, cell);
+		return (count==THREE_NEIGHBOURS || (count== TWO_NEIGHBOURS && isAlive));
 	},
 	
 	nextGeneration:function(){
