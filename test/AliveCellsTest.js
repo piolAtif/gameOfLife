@@ -167,12 +167,18 @@ describe.only('alive for next generation',function(){
 					  	  	[1,0],[1,1]];
 
 		var state = new State(glider);
-		var expected = [[-1,0],	
-								[0,1],[0,2],
+		var expected = [
+								[0,1],
 						[1,0],[1,1]];
 
 		assert.deepEqual(expected, state.aliveForNextGen());
+
+		var thirdGenState = new State(expected);
+		var expectedForThirdGen = [[0,1],[1,0],[1,1]];
+		assert.deepEqual(expectedForThirdGen, thirdGenState.aliveForNextGen());
 	});
+
+
 });
 
 
