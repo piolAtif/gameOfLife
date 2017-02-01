@@ -172,10 +172,6 @@ describe.only('alive for next generation',function(){
 						[1,0],[1,1]];
 
 		assert.deepEqual(expected, state.aliveForNextGen());
-
-		var thirdGenState = new State(expected);
-		var expectedForThirdGen = [[0,1],[1,0],[1,1]];
-		assert.deepEqual(expectedForThirdGen, thirdGenState.aliveForNextGen());
 	});
 
 
